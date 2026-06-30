@@ -1,0 +1,1 @@
+UPDATE companies SET onboarding_completed = false, onboarding_status = 'not_started' WHERE id = 'fa392af7-a60d-4baf-adf3-73b5cfabba9a';

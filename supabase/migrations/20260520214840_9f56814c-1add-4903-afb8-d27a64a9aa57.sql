@@ -1,0 +1,1 @@
+SELECT public.register_company('cccbaf68-fe7a-4ee8-9cb9-5140d01750c4'::uuid, 'yanaokandza@gmail.com', 'Dayana okandza', 'Miracle Agence', 'travel_agency'::sector_type, 'Brazzaville', 'Congo');

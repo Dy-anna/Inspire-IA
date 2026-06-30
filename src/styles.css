@@ -1,0 +1,236 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  color: #1A1A1A;
+  background: #F7F7F5;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+a { color: inherit; }
+button { font-family: 'Inter', sans-serif; }
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+}
+
+:root {
+  --radius: 0.5rem;
+  --background: oklch(0.975 0.002 100);
+  --foreground: oklch(0.18 0 0);
+  --primary: oklch(0.18 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --muted: oklch(0.95 0.002 100);
+  --muted-foreground: oklch(0.55 0 0);
+  --border: oklch(0.915 0.002 100);
+}
+
+.dark {
+  --background: oklch(0.18 0 0);
+  --foreground: oklch(0.95 0 0);
+  --primary: oklch(0.95 0 0);
+  --primary-foreground: oklch(0.18 0 0);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+  --border: oklch(1 0 0 / 12%);
+}
+
+/* =========================================================================
+   Responsive overrides — pages publiques (Home, About, Contact, Secteurs)
+   Les pages utilisent des styles inline avec des grilles fixes. On les
+   surcharge ici via des sélecteurs d'attributs + !important pour offrir
+   un rendu propre sur tablette et mobile sans réécrire chaque page.
+   ========================================================================= */
+
+.public-page { max-width: 100vw; overflow-x: hidden; }
+.public-page img, .public-page svg { max-width: 100%; }
+
+/* Note : React émet les styles inline sans espace après ":" en SSR
+   (ex: grid-template-columns:repeat(3,1fr)) mais avec espace au runtime.
+   On utilise donc des sélecteurs sur la valeur seule pour matcher les deux. */
+
+/* ---- Tablette (≤ 1024px) ---- */
+@media (max-width: 1024px) {
+  .public-page section[style*="padding:96px"],
+  .public-page section[style*="padding: 96px"],
+  .public-page section[style*="padding:80px"],
+  .public-page section[style*="padding: 80px"],
+  .public-page section[style*="padding:88px"],
+  .public-page section[style*="padding: 88px"],
+  .public-page section[style*="padding:100px"],
+  .public-page section[style*="padding: 100px"],
+  .public-page section[style*="padding:72px"],
+  .public-page section[style*="padding: 72px"] {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+  .public-page [style*="repeat(3,1fr)"],
+  .public-page [style*="repeat(3, 1fr)"],
+  .public-page [style*="repeat(4,1fr)"],
+  .public-page [style*="repeat(4, 1fr)"],
+  .public-page [style*="repeat(5,1fr)"],
+  .public-page [style*="repeat(5, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .public-page [style*="2fr 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .public-page [style*="1fr 1.1fr"],
+  .public-page [style*="1fr 1.3fr"],
+  .public-page [style*="380px 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .public-page h1 { font-size: clamp(32px, 5vw, 48px) !important; }
+  .public-page h2 { font-size: clamp(24px, 3.6vw, 34px) !important; }
+}
+
+/* ---- Mobile (≤ 720px) ---- */
+@media (max-width: 720px) {
+  /* Nav : on cache la liste de liens centrale, on garde Logo + CTA */
+  .public-page header nav { display: none !important; }
+  .public-page header > div { padding-left: 16px !important; padding-right: 16px !important; }
+  .public-page header a[href="/login"],
+  .public-page header a[style*="Se connecter"] { display: none !important; }
+
+  .public-page section { padding-left: 16px !important; padding-right: 16px !important; }
+  .public-page section[style*="padding:96px"],
+  .public-page section[style*="padding: 96px"],
+  .public-page section[style*="padding:100px"],
+  .public-page section[style*="padding: 100px"],
+  .public-page section[style*="padding:88px"],
+  .public-page section[style*="padding: 88px"],
+  .public-page section[style*="padding:80px"],
+  .public-page section[style*="padding: 80px"],
+  .public-page section[style*="padding:72px"],
+  .public-page section[style*="padding: 72px"] {
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+  .public-page footer > div { padding: 40px 16px 24px !important; }
+
+  .public-page [style*="repeat(2,1fr)"],
+  .public-page [style*="repeat(2, 1fr)"],
+  .public-page [style*="repeat(3,1fr)"],
+  .public-page [style*="repeat(3, 1fr)"],
+  .public-page [style*="repeat(4,1fr)"],
+  .public-page [style*="repeat(4, 1fr)"],
+  .public-page [style*="repeat(5,1fr)"],
+  .public-page [style*="repeat(5, 1fr)"],
+  .public-page [style*="2fr 1fr 1fr 1fr"],
+  .public-page [style*="1fr 1.1fr"],
+  .public-page [style*="1fr 1.3fr"],
+  .public-page [style*="380px 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Typographie hero */
+  .public-page h1 { font-size: clamp(28px, 8vw, 38px) !important; line-height: 1.15 !important; }
+  .public-page h2 { font-size: clamp(22px, 6vw, 28px) !important; line-height: 1.2 !important; }
+
+  /* Pills/blobs flottants ornementaux : désactivés sur mobile */
+  .public-page [style*="animation: floatY"],
+  .public-page [style*="animation:floatY"],
+  .public-page [style*="animation: pulseGlow"] { display: none !important; }
+
+  /* CTA boutons */
+  .public-page a[class*="cta-"],
+  .public-page button[class*="cta-"] { padding: 12px 18px !important; font-size: 14px !important; }
+
+  /* Cartes témoignages marquee : largeur réduite */
+  .public-page .testi-card { flex: 0 0 280px !important; padding: 20px !important; }
+
+  /* Démo widget — empile la sidebar */
+  .public-page [style*="190px 1fr"] { grid-template-columns: 1fr !important; }
+}
+
+/* ---- Mobile (≤ 560px) — ajustements fins page About / hero ---- */
+@media (max-width: 560px) {
+  /* About : photo CEO trop grosse en plein écran — on la limite et la centre */
+  .public-page .founder-grid { gap: 28px !important; }
+  .public-page .founder-grid > div:first-child {
+    max-width: 240px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  /* About : les 3 pastilles "ventures" restent en ligne mais compactes */
+  .public-page .founder-grid [style*="repeat(3, 1fr)"],
+  .public-page .founder-grid [style*="repeat(3,1fr)"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+  .public-page .venture-inner { padding: 10px 6px !important; }
+  .public-page .venture-inner .syne { font-size: 12px !important; line-height: 1.2 !important; }
+
+  /* Sections : padding vertical encore réduit, horizontal serré */
+  .public-page .section-pad,
+  .public-page section[style*="padding:96px"],
+  .public-page section[style*="padding: 96px"],
+  .public-page section[style*="padding:100px"],
+  .public-page section[style*="padding: 100px"] {
+    padding: 44px 16px !important;
+  }
+
+  /* Hero About : moins étouffé verticalement, h1 plus compact */
+  .public-page section[style*="100px 32px 120px"] {
+    padding: 56px 16px 64px !important;
+  }
+  .public-page .hero-h1 { font-size: 30px !important; line-height: 1.1 !important; margin-bottom: 16px !important; }
+  .public-page h1 { font-size: 30px !important; line-height: 1.1 !important; }
+  .public-page h2,
+  .public-page .h2 { font-size: 24px !important; line-height: 1.2 !important; }
+
+  /* Paragraphes : taille lisible mais moins imposante */
+  .public-page section p { font-size: 14.5px !important; line-height: 1.6 !important; }
+
+  /* Cartes Piliers / Valeurs : padding réduit, gap serré */
+  .public-page .pillar-card { padding: 20px !important; }
+  .public-page .pillars-grid,
+  .public-page .values-grid { gap: 12px !important; }
+  .public-page .values-grid > div { padding: 22px !important; }
+
+  /* Secteurs (dark) : grille 2 colonnes, cartes compactes */
+  .public-page .sectors-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  .public-page .sectors-grid > div { padding: 18px 10px !important; }
+
+  /* Stats : valeurs un peu plus petites */
+  .public-page .stats-grid { gap: 16px !important; }
+  .public-page .stats-grid .syne { font-size: 30px !important; }
+
+  /* Badges/pills "NOTRE HISTOIRE" etc : marge réduite */
+  .public-page section .anim-up:first-child { margin-bottom: 16px !important; }
+
+  /* CTAs hero : largeur pleine, empilés */
+  .public-page section a[href="/contact"],
+  .public-page section a[href="/"] { font-size: 14px !important; }
+
+  /* Footer : grille 1 colonne au lieu de 2fr 1fr 1fr 1fr */
+  .public-page footer [style*="2fr 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 28px !important;
+  }
+}
