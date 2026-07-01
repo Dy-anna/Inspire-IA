@@ -8,6 +8,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { Utensils, Home as HomeIcon, Plane, Stethoscope, GraduationCap, Hotel, PartyPopper, Building2, User, MessageCircle, Sparkles } from "lucide-react";
+import { SectorIcon } from "@/components/SectorIcon";
 import { toast } from "sonner";
 import { AvatarPicker, buildAvatarUrl } from "@/components/AvatarPicker";
 
@@ -424,7 +425,7 @@ export default function OnboardingPage() {
               {avatarUrl ? (
                 <img src={avatarUrl} width={90} height={90} style={{ borderRadius: "50%", display: "block" }} alt="avatar" />
               ) : (
-                {(() => { const Icon = sec?.icon || PartyPopper; return <Icon size={42} color={sec?.color || "#6B3FA0"} />; })()}
+                <SectorIcon name={sec?.icon || "PartyPopper"} size={42} color={sec?.color || "#6B3FA0"} />
               )}
             </div>
           </div>
