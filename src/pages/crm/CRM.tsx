@@ -154,7 +154,7 @@ const CRM: React.FC = () => {
           </div>
         </div>
         <button
-          onClick={() => window.location.href = `/catalogue?new=true`}
+          onClick={() => window.location.href = `/app/catalogue?new=true`}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90"
           style={{ background: COLOR }}>
           <Plus size={15} /> Nouveau {config.entity_label.toLowerCase()}
@@ -195,7 +195,7 @@ const CRM: React.FC = () => {
         <div style={{ background: '#fff', border: '1px solid #E8E8E5', borderRadius: 10 }} className="overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: '#F1F1EF' }}>
             <h2 style={{ fontSize: 13, fontWeight: 700, color: '#1A1A1A' }}>{config.entity_label_plural} récents</h2>
-            <button onClick={() => window.location.href = '/catalogue'}
+            <button onClick={() => window.location.href = '/app/catalogue'}
               className="text-xs font-medium flex items-center gap-1" style={{ color: COLOR }}>
               Tout voir <ChevronRight size={13} />
             </button>
@@ -209,7 +209,7 @@ const CRM: React.FC = () => {
               <p style={{ fontSize: 13, color: '#AFAFAC' }} className="mb-4">
                 Aucun {config.entity_label.toLowerCase()} pour le moment
               </p>
-              <button onClick={() => window.location.href = '/catalogue?new=true'}
+              <button onClick={() => window.location.href = '/app/catalogue?new=true'}
                 className="px-4 py-2 rounded-lg text-sm font-medium text-white"
                 style={{ background: COLOR }}>
                 Créer mon premier {config.entity_label.toLowerCase()}
