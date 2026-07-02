@@ -57,6 +57,7 @@ export default function LoginPage() {
   const handleKeyDown = (e: React.KeyboardEvent) => { if (e.key === "Enter") handleLogin(); };
 
   const handleGoogleLogin = async () => {
+    setDemoMode(false);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: "https://inspire-ia.com/auth/callback" },
