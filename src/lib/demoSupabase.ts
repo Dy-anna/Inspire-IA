@@ -5,6 +5,113 @@
 
 import { getFixtures, type DemoSector } from "./demoFixtures";
 
+
+// ───── sector_configs mock (global, not per-company) ────────────────────────
+const SECTOR_CONFIGS: Record<string, any> = {
+  restaurant: {
+    sector: "restaurant", label: "Restaurant", icon: "UtensilsCrossed", color: "#FF6B35",
+    entity_table: "orders", entity_label: "Commande", entity_label_plural: "Commandes",
+    crm_nav_label: "Commandes & clients", title_field: "client_name", subtitle_field: "items_summary",
+    date_field: "created_at", status_field: "status",
+    kpis: [
+      { key: "active_orders", label: "Commandes actives" },
+      { key: "ca_today", label: "CA du jour" },
+      { key: "pending_orders", label: "En attente" },
+    ],
+    catalogue_table: "menu_items", catalogue_label: "Plat", catalogue_title_field: "name",
+    catalogue_desc_field: "description", catalogue_price_field: "price",
+  },
+  real_estate: {
+    sector: "real_estate", label: "Immobilier", icon: "Building2", color: "#00C875",
+    entity_table: "property_leads", entity_label: "Lead", entity_label_plural: "Leads",
+    crm_nav_label: "Leads & pipeline", title_field: "client_name", subtitle_field: "property_type",
+    date_field: "created_at", status_field: "status",
+    kpis: [
+      { key: "pipeline_leads", label: "Leads en pipeline" },
+      { key: "visits_upcoming", label: "Visites à venir" },
+      { key: "ca_month", label: "CA du mois" },
+    ],
+    catalogue_table: "properties", catalogue_label: "Bien", catalogue_title_field: "title",
+    catalogue_desc_field: "description", catalogue_price_field: "price",
+  },
+  travel_agency: {
+    sector: "travel_agency", label: "Agence de voyage", icon: "Plane", color: "#579BFC",
+    entity_table: "trip_bookings", entity_label: "Réservation", entity_label_plural: "Réservations",
+    crm_nav_label: "Réservations", title_field: "client_name", subtitle_field: "destination",
+    date_field: "created_at", status_field: "status",
+    kpis: [
+      { key: "active_bookings", label: "Réservations actives" },
+      { key: "departures_upcoming", label: "Départs à venir" },
+      { key: "ca_month", label: "CA du mois" },
+    ],
+    catalogue_table: "trip_packages", catalogue_label: "Package", catalogue_title_field: "name",
+    catalogue_desc_field: "description", catalogue_price_field: "base_price",
+  },
+  private_school: {
+    sector: "private_school", label: "École privée", icon: "GraduationCap", color: "#A25DDC",
+    entity_table: "students", entity_label: "Élève", entity_label_plural: "Élèves",
+    crm_nav_label: "Élèves & inscriptions", title_field: "full_name", subtitle_field: "class_level",
+    date_field: "created_at", status_field: "enrollment_status",
+    kpis: [
+      { key: "enrolled_students", label: "Élèves inscrits" },
+      { key: "pending_enrollments", label: "Inscriptions en attente" },
+      { key: "ca_month", label: "Frais collectés" },
+    ],
+    catalogue_table: "school_classes", catalogue_label: "Classe", catalogue_title_field: "name",
+    catalogue_desc_field: "description", catalogue_price_field: "annual_fee",
+  },
+  private_clinic: {
+    sector: "private_clinic", label: "Clinique", icon: "Stethoscope", color: "#E2445C",
+    entity_table: "appointments", entity_label: "Rendez-vous", entity_label_plural: "Rendez-vous",
+    crm_nav_label: "Rendez-vous & patients", title_field: "patient_name", subtitle_field: "doctor_name",
+    date_field: "scheduled_at", status_field: "status",
+    kpis: [
+      { key: "appointments_today", label: "RDV aujourd'hui" },
+      { key: "available_rooms", label: "Disponibilités" },
+      { key: "ca_month", label: "CA du mois" },
+    ],
+    catalogue_table: "clinic_services", catalogue_label: "Service", catalogue_title_field: "name",
+    catalogue_desc_field: "description", catalogue_price_field: "price",
+  },
+  hotel: {
+    sector: "hotel", label: "Hôtellerie", icon: "Hotel", color: "#FF6B35",
+    entity_table: "reservations", entity_label: "Réservation", entity_label_plural: "Réservations",
+    crm_nav_label: "Réservations & chambres", title_field: "guest_name", subtitle_field: "room_type",
+    date_field: "check_in_date", status_field: "status",
+    kpis: [
+      { key: "occupied_rooms", label: "Chambres occupées" },
+      { key: "checkins_today", label: "Check-ins aujourd'hui" },
+      { key: "ca_month", label: "CA du mois" },
+    ],
+    catalogue_table: "room_types", catalogue_label: "Chambre", catalogue_title_field: "name",
+    catalogue_desc_field: "description", catalogue_price_field: "price_per_night",
+  },
+  event: {
+    sector: "event", label: "Événementiel", icon: "PartyPopper", color: "#F59E0B",
+    entity_table: "events", entity_label: "Événement", entity_label_plural: "Événements",
+    crm_nav_label: "Événements", title_field: "name", subtitle_field: "event_type",
+    date_field: "event_date", status_field: "status",
+    kpis: [
+      { key: "events_month", label: "Événements ce mois" },
+      { key: "ca_month", label: "CA du mois" },
+      { key: "margin_avg", label: "Marge moyenne" },
+    ],
+    catalogue_table: "event_packages", catalogue_label: "Formule", catalogue_title_field: "name",
+    catalogue_desc_field: "description", catalogue_price_field: "price_per_person",
+  },
+};
+
+// Sector key mapping (demoKey → sector_configs key)
+const DEMO_TO_SECTOR: Record<string, string> = {
+  restaurant: "restaurant",
+  real_estate: "real_estate",
+  travel_agency: "travel_agency",
+  private_school: "private_school",
+  private_clinic: "private_clinic",
+  hotel: "hotel",
+  event: "event",
+};
+
 // ───── In-memory state per sector ───────────────────────────────────────────
 // We clone fixtures so local mutations (insert/update/delete) stay within
 // the session but don't bleed across sector switches.
@@ -167,6 +274,7 @@ class DemoQuery implements PromiseLike<any> {
     }
 
     // select
+    // select
     const res = buildSelectResult(this.sector, this.table, this.filters, {
       orderBy: this.orderBy,
       limit: this.limitVal,
@@ -176,7 +284,13 @@ class DemoQuery implements PromiseLike<any> {
     });
     if (this.isSingle || this.isMaybeSingle) {
       const list = (res.data as any[] | null) ?? [];
-      return { data: list[0] ?? null, error: null };
+      const row = list[0] ?? null;
+      if (this.table === "users" && row && !row.companies) {
+        const allUsers = tableFor(this.sector, "users");
+        const full = allUsers.find((u: any) => u.id === row.id);
+        if (full?.companies) return { data: { ...row, companies: full.companies }, error: null };
+      }
+      return { data: row, error: null };
     }
     return { data: res.data, error: null, count: res.count };
   }
@@ -189,7 +303,6 @@ class DemoQuery implements PromiseLike<any> {
   }
 }
 
-// ───── Storage / Auth / Channel stubs ───────────────────────────────────────
 function makeStorage() {
   const bucket = (_name: string) => ({
     upload: async (_path: string, _file: any, _opts?: any) => ({ data: { path: _path }, error: null }),
@@ -233,11 +346,41 @@ function makeChannel() {
 // ───── Public factory ───────────────────────────────────────────────────────
 export function createDemoClient(sector: DemoSector) {
   return {
-    from: (table: string) => new DemoQuery(sector, table),
+    from: (table: string) => {
+      if (table === "sector_configs") {
+        // Return a special mock that handles .eq("sector", x).single()
+        const sectorKey = DEMO_TO_SECTOR[sector] || sector;
+        const configData = SECTOR_CONFIGS[sectorKey] || null;
+        const mockQuery: any = {
+          select: (_cols: string) => mockQuery,
+          eq: (_col: string, _val: string) => mockQuery,
+          single: async () => ({ data: configData, error: configData ? null : { message: "Not found" } }),
+          maybeSingle: async () => ({ data: configData, error: null }),
+          then: (resolve: any) => Promise.resolve({ data: configData ? [configData] : [], error: null }).then(resolve),
+        };
+        return mockQuery;
+      }
+      return new DemoQuery(sector, table);
+    },
     auth: makeAuth(),
     storage: makeStorage(),
     channel: (_name: string) => makeChannel(),
     removeChannel: (_ch: any) => {},
-    rpc: async (_fn: string, _params?: any) => ({ data: null, error: null }),
+    rpc: async (fn: string, _params?: any) => {
+      if (fn === "get_sector_stats") {
+        // Return mock KPI stats for the demo sector
+        return { data: {
+          active_orders: 12, ca_today: 185000, pending_orders: 3,
+          pipeline_leads: 8, visits_upcoming: 4, ca_month: 2400000,
+          active_bookings: 6, departures_upcoming: 2,
+          enrolled_students: 247, pending_enrollments: 12,
+          appointments_today: 18, available_rooms: 5,
+          occupied_rooms: 22, checkins_today: 4,
+          events_month: 7, margin_avg: 38,
+          total_clients: 10,
+        }, error: null };
+      }
+      return { data: null, error: null };
+    },
   };
 }
