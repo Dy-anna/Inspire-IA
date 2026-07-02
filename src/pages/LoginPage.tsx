@@ -5,6 +5,7 @@
 import { useState, useEffect } from "react";
 import { Logo } from "@/components/Logo";
 import { supabase } from "@/lib/supabase";
+import { setDemoMode } from "@/lib/supabase";
 import { Utensils, Home as HomeIcon, Plane, Stethoscope, GraduationCap, Hotel } from "lucide-react";
 import { toast } from "sonner";
 
@@ -40,6 +41,7 @@ export default function LoginPage() {
   }, []);
 
   const handleLogin = async () => {
+    setDemoMode(false);
     if (!email.trim() || !password) { toast.error("Email et mot de passe requis"); return; }
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
